@@ -18,14 +18,27 @@ public class StackImpl implements Stack {
 
     @Override
     public void push(int x) {
-        head.setValue(new Node(x, head.getValue()));
+        while (true) {
+            Node curHead = head.getValue();
+            Node futureHead = new Node(x, curHead);
+            if (head.compareAndSet(curHead, futureHead)) {
+                return;
+            }
+        }
     }
 
     @Override
     public int pop() {
-        Node curHead = head.getValue();
-        if (curHead == null) return Integer.MIN_VALUE;
-        head.setValue(curHead.next.getValue());
-        return curHead.x;
+        while (true) {
+            Node curHead = head.getValue();
+            if (curHead == null) {
+                return Integer.MIN_VALUE;
+            }
+
+            Node futureHead = curHead.next.getValue();
+            if (head.compareAndSet(curHead, futureHead)) {
+                return curHead.x;
+            }
+        }
     }
 }
