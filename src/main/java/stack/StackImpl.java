@@ -3,12 +3,11 @@ package stack;
 import kotlinx.atomicfu.AtomicIntArray;
 import kotlinx.atomicfu.AtomicRef;
 
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class StackImpl implements Stack {
     private static final int ELIMINATION_ITERATING = 2;
     private static final int ELIMINATION_SIZE = 8;
-    private static final Random random = new Random();
 
     private static class Node {
         final AtomicRef<Node> next;
@@ -29,7 +28,7 @@ public class StackImpl implements Stack {
     @Override
     public void push(int x) {
         int eliminationIndex = -1;
-        int y = random.nextInt(ELIMINATION_SIZE);
+        int y = ThreadLocalRandom.current().nextInt(ELIMINATION_SIZE);
         for (int i = 0; i < ELIMINATION_ITERATING; i++, y++) {
             if (y == ELIMINATION_SIZE) {
                 y = 0;
@@ -67,7 +66,7 @@ public class StackImpl implements Stack {
 
     @Override
     public int pop() {
-        int y = random.nextInt(ELIMINATION_SIZE);
+        int y = ThreadLocalRandom.current().nextInt(ELIMINATION_SIZE);
         for (int i = 0; i < ELIMINATION_ITERATING; i++, y++) {
             if (y == ELIMINATION_SIZE) {
                 y = 0;
